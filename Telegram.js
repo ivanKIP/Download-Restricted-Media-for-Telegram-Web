@@ -95,8 +95,17 @@
         const save = () => {
           logger.info("Finish downloading blobs");
           logger.info("Concatenating blobs and downloading...");
-     
-          const fileName =
+
+          let urlComponents, inputFileName;
+
+          try {
+            urlComponents = decodeURIComponent(url.split("/")[1]);
+            inputFileName = JSON.parse(urlComponents).fileName;
+          } catch (err) {
+            logger.info("Unable to retrieve original file name, use random. Message: " + err.message);
+          }
+
+          const fileName = inputFileName ??
             (Math.random() + 1).toString(36).substring(2, 10) +
             "." +
             _file_extension;
